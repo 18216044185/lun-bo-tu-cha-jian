@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		
+		<link rel="stylesheet" type="text/css" href="slider.css"/>
+		
+		<style>
+			
+			.slider1{margin: 20px;}
+			.slider1,.slider1 li {
+				width:300px;
+				height: 420px;
+			}
+			
+			.slider2{margin: 20px auto;}
+			.slider2,.slider2 li {
+				width:400px;
+				height: 300px;
+			}
+		
+		</style>
+	</head>
+	<body>
+		<h2>轮播图</h2>
+		
+		<div class="slider slider1">
+			<div class="slidercontent">
+				<ul>
+					<li>
+						<a href=" "> 
+							<img src="img/1.The Shawshank Redemption.jpg" alt="肖申克的救赎" />
+						</a>
+					</li>
+					<li>
+						<a href=" "> 
+							<img src="img/2.Forrest Gump.jpg" alt="阿甘正传" />
+						</a>
+					</li>
+					<li>
+						<a href=" "> 
+							<img src="img/3.The Pursuit of Happyness.jpg" alt="当幸福来敲门" />
+						</a>
+					</li>
+					<li>
+						<a href=" "> 
+							<img src="img/4.这个杀手不太冷.jpg" alt="这个杀手不太冷" />
+						</a>
+					</li>
+					<li>
+						<a href=" "> 
+							<img src="img/5.WALL·E.jpg" alt="机器人总动员" />
+						</a>
+					</li>
+					<li>
+						<a href=" "> 
+							<img src="img/6.Hachiko.jpg" alt="忠犬八公" />
+						</a>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+	
+		<div class="slider slider2">
+			
+			<div class="slidercontent">
+				<ul>
+					<li>
+						<a href=" "> 
+							<img src="img/10.html.jpg" alt="html是结构" />
+						</a>
+					</li>
+					<li>
+						<a href=" "> 
+							<img src="img/11css.jpg" alt="css是样式" />
+						</a>
+					</li>
+					<li>
+						<a href=" "> 
+							<img src="img/12.js.jpg" alt="js是动作" />
+						</a>
+					</li>
+					<li>
+						<a href=" "> 
+							<img src="img/13.jquery.jpg" alt="这是一个库" />
+						</a>
+					</li>
+					<li>
+						<a href=" "> 
+							<img src="img/14.nodejs.jpg" alt="服务器端的js" />
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		
+		<script src="slider.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			
+			var s1 = new Slider(".slider1",{speed:2500,istxt:false,startIndex:2} );
+			console.info(s1);
+			
+			var s2 = new Slider(".slider2");
+			console.info(s2);
+		</script>
+	</body>
+</html>

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			.slider{
+				margin: 50px auto;
+			}
+			.slider ul, .slider li{
+				margin:0;
+				padding:0;
+				list-style:none;
+			}
+			.slider{
+				position:relative;
+			}
+			.slider,.slider li,.slidercontent{
+				width:300px;
+				height:420px;
+			}
+			.slider .slidercontent{
+				overflow:hidden;
+			}
+			.slider li a,.slider li a img{
+				display:block;
+				width:100%;
+				height:100%;
+			}
+			.slider .btn{
+				position:relative;
+				transition:all .5s;
+				width:50px;
+				height:50px;
+				z-index:2;
+				border-radius:50%;
+				background-color:rgba(255,255,255,0.5);
+				position:absolute;
+				top:50%;
+				transform:translateY(-50%);
+			}
+			.slider .btn:hover{
+				background-color:rgba(255,255,255,1);
+				cursor:pointer;
+			}
+			.slider .btnleft{
+				left:10px;
+			}
+			.slider .btnright{
+				right:10px;
+			}
+			.slider .btn:after, .slider .btn:before{
+				transition:all .5s;
+				content:"";
+				position:absolute;
+				top:50%;
+				transform:translateY(-50%);
+				width:25px;
+				height:3px;
+				left:15px;
+				background-color:rgba(255,0,0,1);
+			}
+			.slider .btnleft:after,.slider .btnleft:before{
+				transform-origin: left center;
+			}
+			.slider .btnleft:after{
+				transform: rotateZ(45deg);
+			}
+			.slider .btnleft:hover:after{
+				transform:rotateZ(60deg);
+			}
+			.slider .btnleft:before{
+				transform: rotateZ(-45deg);
+			}
+			.slider .btnleft:hover:before{
+				transform: rotateZ(-60deg);
+			}
+			
+			
+			.slider .btnright:after,.slider .btnright:before{
+				transform-origin: right center;
+			}
+			.slider .btnright:after{
+				transform: rotateZ(45deg);
+			}
+			.slider .btnright:hover:after{
+				transform:rotateZ(60deg);
+			}
+			.slider .btnright:before{
+				transform: rotateZ(-45deg);
+			}
+			.slider .btnright:hover:before{
+				transform: rotateZ(-60deg);
+			}
+			
+			.slider .txt p{
+				line-height:30px;
+				margin:0;
+			}
+			.slider .txt{
+				height:30px;
+				position:absolute;
+				left:0;
+				right:0;
+				bottom:0;
+				background-color: rgba(0,0,0,.5);
+				color:#fff;
+				padding-left:20px;
+			}
+			.slider .indirector{
+				position:absolute;
+				left:0;
+				right:20px;
+				bottom:30px;
+				text-align:right;
+			}
+			.slider .indirector span{
+				display:inline-block;
+				height:3px;
+				width:20px;
+				background-color:#ccc;
+				margin:5px;
+				transition:transform .5s;
+			}
+			.slider .indirector span.current{
+				background-color:red;
+				transform:scale(1.2);
+			}
+			.slider ul{
+				transition:transform 2s ease-in-out;
+			}
+			.slider ul li{
+				float:left;
+			}
+		</style>
+	</head>
+	<body>
+		<h2>轮播图</h2>
+		<div class="slider">
+			<!--<span class="btn btnleft"></span>
+			<span class="btn btnright"></span>-->
+			<div class="slidercontent">
+				<ul>
+					<li>
+						<a href="">
+							<img src="img/1.The Shawshank Redemption.jpg" alt="肖申克的救赎" />
+						</a>
+					</li>
+					<li>
+						<a href="">
+							<img src="img/2.Forrest Gump.jpg" alt="阿甘正传" />
+						</a>
+					</li>
+					<li>
+						<a href="">
+							<img src="img/3.The Pursuit of Happyness.jpg" alt="当幸福来敲门" />
+						</a>
+					</li>
+					<li>
+						<a href="">
+							<img src="img/4.这个杀手不太冷.jpg" alt="这个杀手不太冷" />
+						</a>
+					</li>
+					<li>
+						<a href="">
+							<img src="img/5.WALL·E.jpg" alt="机器人总动员" />
+						</a>
+					</li>
+					<li>
+						<a href="">
+							<img src="img/6.Hachiko.jpg" alt="忠犬八公" />
+						</a>
+					</li>
+				</ul>
+			</div>
+			<!--<div class="txt">
+				<p>内容介绍</p>
+			</div>-->
+			<!--<div class="indirector">
+				<span class = "current"></span>
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+			</div>-->
+		</div>
+		
+		<script>
+			function Slider(selector){
+				this.slider = document.querySelector(selector);
+				//没有各加一张图之前的图片的张数(顺序的不同出现的问题！！1)
+				this.num = this.slider.querySelectorAll("li").length ;
+				//每张图的基本宽度
+				this.w  = this.slider.offsetWidth;
+				this.addNode(); //前面各加一张图
+				this.addIndirector();//添加指示条
+				this.addBtns();     //添加按钮
+				this.addTxt();      //添加文字区域
+				this.currentIndex = 1; //当前是第几张图
+				
+				
+				//整体的图片容器ul的宽度是（this.num + 2）*w
+				this.ul = this.slider.querySelector("ul");
+				this.ul.style.width = this.w * (this.num+2) +"px";
+			
+				var that = this;
+				this.ul.addEventListener("transitionend",function(){
+					//console.info("动画结束");
+					
+					//获取当前的图片的索引，即当前是第几张图
+					//console.info(that, that.currentIndex);
+					
+					if(that.currentIndex == 0){
+						
+						//当前是第0张时，直接拉到第n张的位置 
+						//不要有过渡动画过过程：把动画的时间设置为0
+						that.ul.style.transitionDuration = '0s';
+						that.ul.style.transform = "translateX("+ -that.w* that.num  +"px)";
+						
+						that.currentIndex = that.num;
+					}
+					else if( that.currentIndex == that.num + 1){
+						//当前是第n+1张时，直接拉到第1张的位置
+						that.ul.style.transitionDuration = '0s';
+						that.ul.style.transform = "translateX("+ -that.w* 1  +"px)";
+						
+						that.currentIndex = 1;
+						
+					}
+				})
+				
+				
+				this.spans = this.slider.querySelectorAll(".indirector span");
+				this.goto(this.currentIndex);
+			}
+			
+			Slider.prototype = {
+				constructor:Slider,
+				addTxt:function(){
+					var div = document.createElement("div");
+					div.className = "txt";
+					div.innerHTML =  "<p></p>";
+					this.slider.appendChild(div);
+				},
+				addIndirector:function(){//添加指示条
+					var div = document.createElement("div");
+					div.className = "indirector";
+					for(var i =0 ;i < this.num;i++){
+						var span = document.createElement("span");
+						div.appendChild(span);
+						
+					}
+					this.slider.appendChild(div);
+				},
+				addBtns:function(){
+					var that = this;
+					var btnleft = document.createElement("span");
+					btnleft.className = "btn btnleft";
+					
+					var btnright = document.createElement("span");
+					btnright.className = "btn btnright";
+					
+					btnleft.addEventListener("click",function(){
+						that.prev();
+					});
+					btnright.addEventListener("click",function(){
+						that.next();
+					});
+					this.slider.appendChild(btnleft);
+					this.slider.appendChild(btnright);
+				},
+				addNode:function(){
+					var ul = this.slider.querySelector("ul");
+					//把第一份li找到，复制一份，加入到最后
+					var lis = ul.querySelectorAll("li");
+					var firstLi = ul.querySelectorAll("li")[0];
+					var firstLiClone = firstLi.cloneNode(true);
+					//appendChild是在最后一个子元素的后面再加入到ul中
+					ul.appendChild(firstLiClone);
+					//把最后一个li找到，复制一份，加入到最前面
+					var lastLi = ul.querySelectorAll("li")[lis.length - 1];
+					var lastLiClone = lastLi.cloneNode(true);
+					//在父节点ul中找到firstLi,然后在前面插入lastLiClone
+					ul.insertBefore(lastLiClone,firstLi);
+				},
+				goto:function(yourIndex){
+					//通过移动ul,把第yourIndex张显示出来
+					//2.动画的原理是：不断更新transform:translateX(值)
+//					  第1张 ：transform:translateX(-w*1)
+//					   第2张 ：transform:translateX(-w*2)
+//					   第3张 ：transform:translateX(-w*3)
+					this.ul.style.transitionDuration = '.5s';
+					this.ul.style.transform = "translateX("+ -this.w*yourIndex +"px)";
+					
+					this.currentIndex = yourIndex;
+					//更新指示条的状态
+					var y = ((this.currentIndex - 1) + this.num) % this.num;
+					for(var i = 0; i < this.spans.length;i++){
+						if(i === y){
+							this.spans[i].className = "current";
+						}
+						else{
+							this.spans[i].className = "";
+						}
+					}
+					
+					//更新文字区域的内容
+					//获取当前的图片的alt
+					var t = this.ul.querySelectorAll("img")[yourIndex].alt;
+					this.slider.querySelector(".txt p").innerHTML = t;
+					
+				},
+				prev:function(){
+					//console.info("上一张");
+					
+					var t = this.currentIndex;
+					
+					this.goto( t - 1 );
+				},
+				next:function(){
+					//console.info("下一张");
+					var t = this.currentIndex;
+					
+					this.goto( t + 1 );
+				}
+			}
+			var s1 = new Slider(".slider");
+			//console.info(s1);
+		</script>
+	</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
